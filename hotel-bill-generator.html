@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hotel Bill Generator</title>
+  <style>
+    /* CSS styling for the webpage */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="number"], select {
+      padding: 5px;
+      /* width: 100%; */
+      margin-bottom: 10px;
+    }
+
+    input[type="checkbox"] {
+      margin-bottom: 5px;
+    }
+
+    input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    #billResult {
+      background-color: #f5f5f5;
+      padding: 10px;
+    }
+
+    #billResult h2 {
+      margin-top: 0;
+    }
+
+    #billResult p {
+      margin-bottom: 5px;
+    }
+    /* Add your own custom styles here */
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Hotel Bill Generator</h1>
+
+  <form id="hotelBillForm">
+    <label for="numberOfNights">Number of Nights:</label>
+    <input type="number" id="numberOfNights" min="1" required><br><br>
+
+    <label for="roomType">Room Type:</label>
+    <select id="roomType">
+      <option value="single">Single Room</option>
+      <option value="double">Double Room</option>
+      <option value="suite">Suite</option>
+    </select><br><br>
+
+    <label for="additionalServices">Additional Services:</label><br>
+    <input type="checkbox" id="breakfast" value="breakfast">
+    <label for="breakfast">Breakfast (+ $10)</label><br>
+    <input type="checkbox" id="wifi" value="wifi">
+    <label for="wifi">WiFi (+ $5)</label><br><br>
+
+    <input type="submit" value="Generate Bill">
+  </form>
+
+  <div id="billResult"></div>
+</div>
+
+  <script>
+    // JavaScript code to calculate and display the bill
+    document.getElementById("hotelBillForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Get user inputs
+      var numberOfNights = parseInt(document.getElementById("numberOfNights").value);
+      var roomType = document.getElementById("roomType").value;
+      var additionalServices = document.querySelectorAll('input[type="checkbox"]:checked');
+
+      // Calculate rates and charges
+      var roomRate = 0;
+      switch (roomType) {
+        case "single":
+          roomRate = 100;
+          break;
+        case "double":
+          roomRate = 150;
+          break;
+        case "suite":
+          roomRate = 200;
+          break;
+      }
+
+      var additionalServicesTotal = 0;
+      additionalServices.forEach(function(service) {
+        switch (service.value) {
+          case "breakfast":
+            additionalServicesTotal += 10;
+            break;
+          case "wifi":
+            additionalServicesTotal += 5;
+            break;
+        }
+      });
+
+      var subtotal = roomRate * numberOfNights;
+      var tax = subtotal * 0.1; // Assuming 10% tax rate
+      var total = subtotal + additionalServicesTotal + tax;
+
+      // Display the bill
+      var billResult = document.getElementById("billResult");
+      billResult.innerHTML =
+        "<h2>Your Bill:</h2>" +
+        "<p>Number of Nights: " + numberOfNights + "</p>" +
+        "<p>Room Type: " + roomType + "</p>" +
+        "<p>Room Rate: $" + roomRate + "</p>" +
+        "<p>Additional Services Total: $" + additionalServicesTotal + "</p>" +
+        "<p>Subtotal: $" + subtotal + "</p>" +
+        "<p>Tax: $" + tax + "</p>" +
+        "<p>Total: $" + total + "</p>";
+    });
+  </script>
+  
+</body>
+</html>
